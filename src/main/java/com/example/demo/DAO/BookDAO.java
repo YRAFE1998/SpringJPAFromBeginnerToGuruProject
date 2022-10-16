@@ -6,6 +6,7 @@ import com.example.demo.model.Book;
 import java.util.List;
 
 public interface BookDAO {
+    Book findByIsbnTypedQuery(String isbn);
     Book getById(Long id);
     Book saveNewBook(Book book);
     List<Book> getByTitle(String title);

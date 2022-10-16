@@ -21,6 +21,11 @@ public class AuthorDaoImplJDBCTemplate implements AuthorDAO{
     }
 
     @Override
+    public List<Author> listAuthorByLastNameLikeQuery(String lastName) {
+        return null;
+    }
+
+    @Override
     public Author getByID(Long id) {
         String sql = "SELECT author.id as id, first_name, last_name, book.id as book_id, book.isbn, " +
                 "book.title, book.publisher from author left outer join book on author.id = book.author_id" +
@@ -58,6 +63,16 @@ public class AuthorDaoImplJDBCTemplate implements AuthorDAO{
     @Override
     public void deleteAuthorById(Long id) {
         jdbcTemplate.update("DELETE FROM author WHERE id = ?", id);
+    }
+
+    @Override
+    public List<Author> findAllAuthorsNamedQuery() {
+        return null;
+    }
+
+    @Override
+    public List<Author> findAuthorByNameNamedQuery(String name) {
+        return null;
     }
 
 

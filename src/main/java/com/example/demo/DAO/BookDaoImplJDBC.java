@@ -17,6 +17,11 @@ public class BookDaoImplJDBC implements BookDAO{
     }
 
     @Override
+    public Book findByIsbnTypedQuery(String isbn) {
+        return null;
+    }
+
+    @Override
     public Book getById(Long id) {
         return jdbcTemplate.queryForObject("SELECT * FROM book WHERE id = ?",getRowMapper() ,id);
     }

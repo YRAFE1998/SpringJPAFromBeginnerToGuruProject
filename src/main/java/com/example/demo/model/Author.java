@@ -3,6 +3,11 @@ package com.example.demo.model;
 import javax.persistence.*;
 import java.util.List;
 
+@NamedQueries({
+        @NamedQuery(name = "author_find_all", query = "FROM Author"),
+        @NamedQuery(name="author_find_by_name", query = "FROM Author WHERE first_name = :first_name")
+})
+
 @Entity
 public class Author {
     @Id

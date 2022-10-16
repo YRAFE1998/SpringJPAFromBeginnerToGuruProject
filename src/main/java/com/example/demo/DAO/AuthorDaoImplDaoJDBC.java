@@ -55,6 +55,11 @@ public class AuthorDaoImplDaoJDBC implements AuthorDAO{
     }
 
     @Override
+    public List<Author> listAuthorByLastNameLikeQuery(String lastName) {
+        return null;
+    }
+
+    @Override
     public Author getByID(Long id) {
         Connection connection = null;
         PreparedStatement ps = null;
@@ -187,6 +192,16 @@ public class AuthorDaoImplDaoJDBC implements AuthorDAO{
         finally {
             closeAll(connection,ps,null);
         }
+    }
+
+    @Override
+    public List<Author> findAllAuthorsNamedQuery() {
+        return null;
+    }
+
+    @Override
+    public List<Author> findAuthorByNameNamedQuery(String name) {
+        return null;
     }
 
 }

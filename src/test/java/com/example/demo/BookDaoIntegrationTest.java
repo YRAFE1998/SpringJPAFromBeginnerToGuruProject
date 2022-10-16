@@ -109,4 +109,21 @@ public class BookDaoIntegrationTest {
 
     }
 
+    @Test
+    void testfindByISBN(){
+        Book book = new Book();
+        book.setISBN("Isbn for testbyISBN");
+        book.setPublisher("publisher");
+        book.setTitle("tytool");
+        bookDAO.saveNewBook(book);
+        Book returnedBook = bookDAO.findByIsbnTypedQuery(book.getISBN());
+
+        assertThat(returnedBook).isNotNull();
+        assertThat(returnedBook.getISBN()).isEqualTo("Isbn for testbyISBN");
+
+        bookDAO.deleteBookById(returnedBook.getId());
+
+    }
+
+
 }
