@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;;
 public class AuthorDaoIntegrationTest {
 
     @Autowired
-    @Qualifier("JDBCTemplate")
+    @Qualifier("AuthorDaoHibernateImplementation")
     AuthorDAO authorDAO;
 
 
@@ -58,6 +58,7 @@ public class AuthorDaoIntegrationTest {
                 + savedAuthor.getLastName());
 
         assertThat(savedAuthor).isNotNull();
+        assertThat(savedAuthor.getId()).isNotNull();
     }
 
 
