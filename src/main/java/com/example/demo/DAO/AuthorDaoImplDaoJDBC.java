@@ -1,22 +1,16 @@
 package com.example.demo.DAO;
 
 import com.example.demo.model.Author;
-import com.example.demo.model.Book;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Qualifier("DaoJDBC")
-public class AuthorDaoImplDaoJDBC implements AuthorDAO{
+public class AuthorDaoImplDaoJDBC{/* implements AuthorDAO{
 
 
     private final DataSource source;
@@ -158,12 +152,12 @@ public class AuthorDaoImplDaoJDBC implements AuthorDAO{
 
             //resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()");
 
-            /*if(resultSet.next()){
-                Long savedId = resultSet.getLong(1);
-                System.out.println("Last ID = "+ resultSet.getLong(1));
-                Author retrievedAuthor = getByID(savedId);
-                return(retrievedAuthor);
-            }*/
+            ///////if(resultSet.next()){
+            ///////    Long savedId = resultSet.getLong(1);
+            ///////    System.out.println("Last ID = "+ resultSet.getLong(1));
+            ///////    Author retrievedAuthor = getByID(savedId);
+            ///////    return(retrievedAuthor);
+            ///////}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,5 +197,6 @@ public class AuthorDaoImplDaoJDBC implements AuthorDAO{
     public List<Author> findAuthorByNameNamedQuery(String name) {
         return null;
     }
+    */
 
 }

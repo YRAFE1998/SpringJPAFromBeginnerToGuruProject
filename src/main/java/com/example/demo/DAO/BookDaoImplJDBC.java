@@ -57,6 +57,12 @@ public class BookDaoImplJDBC implements BookDAO{
         jdbcTemplate.update("DELETE FROM book WHERE id = ?", id);
 
     }
+
+    @Override
+    public List<Book> getBookswithISBNGreaterThan(String s) {
+        return null;
+    }
+
     private BookMapper getRowMapper() {
 
         return new BookMapper();

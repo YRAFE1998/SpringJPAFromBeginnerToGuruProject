@@ -7,11 +7,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Component
 @Qualifier("JDBCTemplate")
-public class AuthorDaoImplJDBCTemplate implements AuthorDAO{
+public class AuthorDaoImplJDBCTemplate{/* implements AuthorDAO{
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -79,4 +79,5 @@ public class AuthorDaoImplJDBCTemplate implements AuthorDAO{
     private RowMapper<Author> getRowMapper(){
         return new AuthorMapper();
     }
+    */
 }

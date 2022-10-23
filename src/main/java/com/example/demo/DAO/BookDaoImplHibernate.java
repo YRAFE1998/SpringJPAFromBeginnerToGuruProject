@@ -83,4 +83,9 @@ public class BookDaoImplHibernate implements BookDAO{
         entityManager.flush();
         entityManager.getTransaction().commit();
     }
+
+    @Override
+    public List<Book> getBookswithISBNGreaterThan(String s) {
+        return null;
+    }
 }

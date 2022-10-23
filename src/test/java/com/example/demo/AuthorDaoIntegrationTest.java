@@ -3,8 +3,10 @@ package com.example.demo;
 
 import com.example.demo.DAO.AuthorDAO;
 import com.example.demo.model.Author;
+import com.example.demo.repositories.AuthorRepository;
 import liquibase.pro.packaged.A;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,33 +15,37 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;;
 
 //@ActiveProfiles("h2")
 @DataJpaTest
-@ComponentScan("package com.example.demo.DAO")
+@ComponentScan({"package com.example.demo.repositories","package com.example.demo.DAO"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
 public class AuthorDaoIntegrationTest {
 
     @Autowired
-    @Qualifier("AuthorDaoHibernateImplementation")
+    @Qualifier("AuthorDaoImplRepositories")
     AuthorDAO authorDAO;
 
+    @Autowired
+    AuthorRepository authorRepository;
 
     @Test
     void testGetAuthorById(){
-        Author author = authorDAO.getByID(123456L);
+        Author author = authorDAO.getById(123456L);
         assertThat(author).isNotNull();
     }
 
+
     @Test
-    void testGetAuthor(){
-        ArrayList<Author> authors = (ArrayList<Author>) authorDAO.getByName("Yousef");
+    void testGetAuthorList(){
+        List<Author> authors = authorDAO.getByName("yousef");
         assertThat(authors).isNotEmpty();
-        authors.stream().forEach(author -> {
+        authors.forEach(author -> {
             //System.out.println("Author First Name : " + author.getFirstName());
             assertThat(author.getLastName()).isEqualTo("Refaat");
         });
@@ -92,7 +98,8 @@ public class AuthorDaoIntegrationTest {
         /*assertThrows(EmptyResultDataAccessException.class, () -> {
             authorDAO.getByID(saved.getId());
         });*/
-        assertThat(authorDAO.getByID(saved.getId())).isNull();
+        assertThrows(NoSuchElementException.class, () -> { authorDAO.getById(saved.getId());});
+
     }
 
     @Test
@@ -132,7 +139,7 @@ public class AuthorDaoIntegrationTest {
         author.setLastName("Fouad Elmasry");
 
         authorDAO.saveNewAuthor(author);
-        
+
         List<Author> authors = authorDAO.findAuthorByNameNamedQuery("Yousef Refaat Ahmed");
         assertThat(authors).isNotEmpty();
         authors.forEach(authorToAssert -> {
@@ -142,8 +149,8 @@ public class AuthorDaoIntegrationTest {
 
         authors.forEach((authorToDelete) -> {
             authorDAO.deleteAuthorById(authorToDelete.getId());
-        });
 
+        });
     }
 
 

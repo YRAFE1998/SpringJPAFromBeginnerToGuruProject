@@ -4,6 +4,9 @@ package com.example.demo.model;
 import javax.persistence.*;
 import java.util.Objects;
 
+
+
+@NamedQuery(name = "Book.jpaQuery",query = "FROM Book b WHERE b.publisher = :publisher")
 @Entity
 public class Book {
 

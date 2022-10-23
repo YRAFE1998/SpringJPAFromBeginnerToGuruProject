@@ -3,6 +3,7 @@ import com.example.demo.DAO.AuthorDAO;
 import com.example.demo.DAO.BookDAO;
 import com.example.demo.model.Author;
 import com.example.demo.model.Book;
+import com.example.demo.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +15,12 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //@ActiveProfiles("h2")
@@ -24,8 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BookDaoIntegrationTest {
 
     @Autowired
-    @Qualifier("BookDaoImplementationHibernate")
+    @Qualifier("BookDaoImplRepositories")
     BookDAO bookDAO;
+
+    @Autowired
+    BookRepository bookRepository;
 
 
     @Test
@@ -94,6 +103,7 @@ public class BookDaoIntegrationTest {
         assertThat(updatedBook.getTitle()).isEqualTo("Test Title for GetBy Title after update");
     }
 
+    @Transactional
     @Test
     void testDeleteBook(){
         Book book = new Book();
@@ -105,10 +115,11 @@ public class BookDaoIntegrationTest {
 
         bookDAO.deleteBookById(savedBook.getId());
 
-        assertThat(bookDAO.getById(savedBook.getId())).isNull();
+        assertThrows(NoSuchElementException.class, () -> {bookDAO.getById(savedBook.getId());});
 
     }
 
+    @Transactional
     @Test
     void testfindByISBN(){
         Book book = new Book();
@@ -125,5 +136,33 @@ public class BookDaoIntegrationTest {
 
     }
 
+    @Test
+    void testGetByTitleNullable(){
+        assertNull(bookRepository.readBookByTitle("kjhb"));
+    }
 
+    @Test
+    void testWroteQuery(){
+        Stream<Book> books = bookRepository.getAllBooksWithAuthors();
+        books.forEach(book ->assertThat(book.getISBN()).isNotNull());
+    }
+
+    @Test
+    void testWroteQueryNamedParameters(){
+        Stream<Book> books = bookRepository.getBookByIsbn("isbn35");
+        books.forEach(book ->assertThat(book.getISBN()).isEqualTo("isbn35"));
+    }
+
+
+    @Test
+    void testNaiveSqlQuery(){
+        List<Book> books = bookDAO.getBookswithISBNGreaterThan("20");
+        books.forEach(book ->assertThat(Integer.parseInt(book.getISBN().replaceAll("[^0-9]", ""))).isGreaterThan(20));
+    }
+
+    @Test
+    void testNamedQueryJPA(){
+        List<Book> books = bookRepository.jpaQuery("publisher x");
+        books.forEach(book ->assertThat(book.getPublisher()).isEqualTo("publisher x"));
+    }
 }
