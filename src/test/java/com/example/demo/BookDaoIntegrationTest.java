@@ -1,9 +1,7 @@
 package com.example.demo;
-import com.example.demo.DAO.AuthorDAO;
 import com.example.demo.DAO.BookDAO;
 import com.example.demo.model.Author;
 import com.example.demo.model.Book;
-import com.example.demo.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,16 +9,17 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //@ActiveProfiles("h2")
@@ -30,11 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BookDaoIntegrationTest {
 
     @Autowired
-    @Qualifier("BookDaoImplRepositories")
     BookDAO bookDAO;
-
-    @Autowired
-    BookRepository bookRepository;
 
 
     @Test
@@ -115,54 +110,47 @@ public class BookDaoIntegrationTest {
 
         bookDAO.deleteBookById(savedBook.getId());
 
-        assertThrows(NoSuchElementException.class, () -> {bookDAO.getById(savedBook.getId());});
+        assertThrows(EmptyResultDataAccessException.class, () -> {bookDAO.getById(savedBook.getId());});
 
     }
 
-    @Transactional
-    @Test
-    void testfindByISBN(){
-        Book book = new Book();
-        book.setISBN("Isbn for testbyISBN");
-        book.setPublisher("publisher");
-        book.setTitle("tytool");
-        bookDAO.saveNewBook(book);
-        Book returnedBook = bookDAO.findByIsbnTypedQuery(book.getISBN());
-
-        assertThat(returnedBook).isNotNull();
-        assertThat(returnedBook.getISBN()).isEqualTo("Isbn for testbyISBN");
-
-        bookDAO.deleteBookById(returnedBook.getId());
-
+    /*@Test
+    void testGetAllBooksPagedLast(){
+        assertThat(bookDAO.getAllBooksByPage(10,10).toArray().length).isEqualTo(4);
     }
 
     @Test
-    void testGetByTitleNullable(){
-        assertNull(bookRepository.readBookByTitle("kjhb"));
-    }
-
-    @Test
-    void testWroteQuery(){
-        Stream<Book> books = bookRepository.getAllBooksWithAuthors();
-        books.forEach(book ->assertThat(book.getISBN()).isNotNull());
-    }
-
-    @Test
-    void testWroteQueryNamedParameters(){
-        Stream<Book> books = bookRepository.getBookByIsbn("isbn35");
-        books.forEach(book ->assertThat(book.getISBN()).isEqualTo("isbn35"));
+    void testGetAllBooksPaged(){
+        assertThat(bookDAO.getAllBooksByPage(10,0).toArray().length).isEqualTo(10);
     }
 
 
     @Test
-    void testNaiveSqlQuery(){
-        List<Book> books = bookDAO.getBookswithISBNGreaterThan("20");
-        books.forEach(book ->assertThat(Integer.parseInt(book.getISBN().replaceAll("[^0-9]", ""))).isGreaterThan(20));
+    void testGetAllBooksPagedLastPageable(){
+        assertThat(bookDAO.getAllBookByPageable(PageRequest.of(1,10)).toArray().length).isEqualTo(4);
     }
 
     @Test
-    void testNamedQueryJPA(){
-        List<Book> books = bookRepository.jpaQuery("publisher x");
-        books.forEach(book ->assertThat(book.getPublisher()).isEqualTo("publisher x"));
+    void testGetAllBooksPagedPageable(){
+        assertThat(bookDAO.getAllBookByPageable(PageRequest.of(0,10)).toArray().length).isEqualTo(10);
+    }*/
+
+    @Test
+    void testGetAllBooksPagedPageable(){
+        List<Book> books = bookDAO.findAllBooksPageable(PageRequest.of(0,10));
+        assertThat(books.toArray().length).isEqualTo(10);
+        assertThat(books.get(0).getTitle()).isEqualTo("Abc");
     }
+    @Test
+    void testGetAllBooksPagedLastPageable(){
+        assertThat(bookDAO.findAllBooksPageable(PageRequest.of(2,10)).toArray().length).isEqualTo(7);
+    }
+    @Test
+    void testFindByTitlePageableSpringDataJpa(){
+        List<Book> books = bookDAO.findByTitle("Test Title", PageRequest.of(0, 10, Sort.by(Sort.Order.desc("publisher"))));
+        assertThat(books.toArray().length).isEqualTo(3);
+        assertThat(books.get(0).getPublisher()).isEqualTo("Mazen Elmasry");
+    }
+
+
 }

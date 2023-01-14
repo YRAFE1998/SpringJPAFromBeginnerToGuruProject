@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="YR" id="add-forty-authors">
+        <sql>
+            insert into author(first_name,last_name) values('Yousef', 'ElMasry');
+            insert into author(first_name,last_name) values('Mohamed', 'ElMasry');
+            insert into author(first_name,last_name) values('Raneem', 'ElMasry');
+            insert into author(first_name,last_name) values('Sara', 'ElMasry');
+            insert into author(first_name,last_name) values('Mostafa', 'ElMasry');
+            insert into author(first_name,last_name) values('Kareem', 'ElMasry');
+            insert into author(first_name,last_name) values('Ahmed', 'ElMasry');
+            insert into author(first_name,last_name) values('Saad', 'ElMasry');
+            insert into author(first_name,last_name) values('Khaled', 'ElMasry');
+            insert into author(first_name,last_name) values('Mahmoud', 'ElMasry');
+            insert into author(first_name,last_name) values('Ziad', 'ElMasry');
+            insert into author(first_name,last_name) values('Adel', 'ElMasry');
+            insert into author(first_name,last_name) values('Ayman', 'ElMasry');
+            insert into author(first_name,last_name) values('Adham', 'ElMasry');
+            insert into author(first_name,last_name) values('Kamal', 'ElMasry');
+            insert into author(first_name,last_name) values('Saied', 'ElMasry');
+            insert into author(first_name,last_name) values('Fatema', 'ElMasry');
+            insert into author(first_name,last_name) values('Manar', 'ElMasry');
+            insert into author(first_name,last_name) values('Nada', 'ElMasry');
+            insert into author(first_name,last_name) values('Farah', 'ElMasry');
+            insert into author(first_name,last_name) values('Yasmine', 'ElMasry');
+            insert into author(first_name,last_name) values('Gamal', 'ElMasry');
+            insert into author(first_name,last_name) values('Hesham', 'ElMasry');
+            insert into author(first_name,last_name) values('Shawky', 'ElMasry');
+            insert into author(first_name,last_name) values('Abdelaziz', 'ElMasry');
+            insert into author(first_name,last_name) values('Islam', 'ElMasry');
+            insert into author(first_name,last_name) values('Yahia', 'ElMasry');
+            insert into author(first_name,last_name) values('Jamila', 'ElMasry');
+            insert into author(first_name,last_name) values('Karma', 'ElMasry');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,16 +1,9 @@
 package com.example.demo.bootstrap;
 
-import com.example.demo.model.AuthorUUID;
-import com.example.demo.model.Book;
-import com.example.demo.model.BookUuid;
 import com.example.demo.repositories.AuthorRepository;
 import com.example.demo.repositories.BookRepository;
-import com.example.demo.repositories.BookUuidRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 //@Profile({"local","default"})
 @Component
@@ -18,12 +11,10 @@ public class DataInitializer implements CommandLineRunner {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
-    private final BookUuidRepository bookUuidRepository;
 
-    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository, BookUuidRepository bookUuidRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
-        this.bookUuidRepository = bookUuidRepository;
     }
 
     @Override

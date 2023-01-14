@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="YR" id="add-many-books">
+        <sql>
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 1');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 2');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 3');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 4');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 5');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 6');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 7');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 8');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 9');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 10');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 11');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 12');
+            insert into book (publisher,title) values('Yousef Elmasry', 'Title 13');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

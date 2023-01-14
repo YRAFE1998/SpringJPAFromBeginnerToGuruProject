@@ -4,35 +4,35 @@ package com.example.demo;
 import com.example.demo.DAO.AuthorDAO;
 import com.example.demo.model.Author;
 import com.example.demo.repositories.AuthorRepository;
-import liquibase.pro.packaged.A;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;;
 
 //@ActiveProfiles("h2")
 @DataJpaTest
-@ComponentScan({"package com.example.demo.repositories","package com.example.demo.DAO"})
+@ComponentScan({"package com.example.demo.DAO"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
 public class AuthorDaoIntegrationTest {
 
     @Autowired
-    @Qualifier("AuthorDaoImplRepositories")
     AuthorDAO authorDAO;
 
-    @Autowired
-    AuthorRepository authorRepository;
 
     @Test
     void testGetAuthorById(){
@@ -67,6 +67,7 @@ public class AuthorDaoIntegrationTest {
     }
 
 
+    @Transactional
     @Test
     void testUpdateAuthor(){
         Author author = new Author();
@@ -83,6 +84,7 @@ public class AuthorDaoIntegrationTest {
 
     }
 
+    @Transactional
     @Test
     void testDeleteAuthor(){
 
@@ -98,61 +100,35 @@ public class AuthorDaoIntegrationTest {
         /*assertThrows(EmptyResultDataAccessException.class, () -> {
             authorDAO.getByID(saved.getId());
         });*/
-        assertThrows(NoSuchElementException.class, () -> { authorDAO.getById(saved.getId());});
+        //assertThrows(EmptyResultDataAccessException.class, () -> { authorDAO.getById(saved.getId());});
+        assertNull(authorDAO.getById(saved.getId()));
 
     }
+/*    @Test
+    void testGetAllBooksPagedOnePageable(){
+        assertThat(authorDAO.getAuthorByLastName("ElMasry",PageRequest.of(1,10))
+                .toArray().length).isEqualTo(10);
+    }
+
 
     @Test
-    void testGetAuthorByNameLike (){
-        Author author = new Author();
-        author.setLastName("Test Last name yyyy");
-        author.setFirstName("first name");
-
-        Author author1 = new Author();
-        author1.setLastName("Test Last name xxxx");
-        author1.setFirstName("first name");
-
-        authorDAO.saveNewAuthor(author);
-        authorDAO.saveNewAuthor(author1);
-
-        List<Author> authors = authorDAO.listAuthorByLastNameLikeQuery("Test Last name");
-
-        assertThat(authors.toArray().length).isGreaterThan(1);
-        assertThat(authors.get(0).getLastName()).contains("Test Last name");
-
-        authors.forEach((authorToDelete) ->{
-            authorDAO.deleteAuthorById(authorToDelete.getId());
-        });
+    void testGetAllBooksPagedLastPageable(){
+        assertThat(authorDAO.getAuthorByLastName("ElMasry",PageRequest.of(3,10))
+                .toArray().length).isEqualTo(1);
     }
+
 
     @Test
-    void testFindAllAuthors (){
-        List<Author> authors = authorDAO.findAllAuthorsNamedQuery();
-        assertThat(authors.toArray().length).isGreaterThan(2);
+    void testGetAllBooksPagedPageable(){
+        assertThat(authorDAO.getAuthorByLastName("ElMasry",PageRequest.of(0,10)).toArray().length).isEqualTo(10);
     }
+*/
 
-    @Test
-    void testFindByNameNamedQueries(){
-
-        Author author = new Author();
-        author.setFirstName("Yousef Refaat Ahmed");
-        author.setLastName("Fouad Elmasry");
-
-        authorDAO.saveNewAuthor(author);
-
-        List<Author> authors = authorDAO.findAuthorByNameNamedQuery("Yousef Refaat Ahmed");
-        assertThat(authors).isNotEmpty();
-        authors.forEach(authorToAssert -> {
-            //System.out.println("Author First Name : " + author.getFirstName());
-            assertThat(authorToAssert.getFirstName()).isEqualTo("Yousef Refaat Ahmed");
-        });
-
-        authors.forEach((authorToDelete) -> {
-            authorDAO.deleteAuthorById(authorToDelete.getId());
-
-        });
-    }
-
-
+@Test
+void testGetAllBooksPagedLastPageable(){
+    List<Author> authors = authorDAO.findAuthorByLastNamePageable("ElMasry",PageRequest.of(0,10,Sort.by(Sort.Order.asc("firstName"))));
+    assertThat(authors.toArray().length).isEqualTo(10);
+    assertThat(authors.get(0).getFirstName()).isEqualTo("Abdelaziz");
+}
 
 }

@@ -3,6 +3,7 @@ package com.example.demo.DAO;
 import com.example.demo.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -10,31 +11,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @Qualifier("AuthorDaoHibernateImplementation")
-public class AuthorDaoImplHibernate {//implements AuthorDAO{
-/*
+public class AuthorDaoImplementation implements AuthorDAO{
+
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    public List<Author> listAuthorByLastNameLikeQuery(String lastName) {
-        EntityManager entityManager = getEntityManager();
-        try{
-            Query query = entityManager.createQuery("SELECT a FROM Author a WHERE " +
-                    "lastName LIKE :last_name");
-            query.setParameter("last_name", "%" + lastName + "%");
-            return query.getResultList();
-        }
-        finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public Author getByID(Long id) {
+    public Author getById(Long id) {
         return getEntityManager().find(Author.class, id);
     }
 
@@ -79,32 +65,30 @@ public class AuthorDaoImplHibernate {//implements AuthorDAO{
     }
 
     @Override
-    public List<Author> findAllAuthorsNamedQuery() {
-        EntityManager entityManager = getEntityManager();
-        try{
-            TypedQuery<Author> namedQuery = entityManager.createNamedQuery("author_find_all", Author.class);
-            return namedQuery.getResultList();
-        }
-        finally {
-            entityManager.close();
-        }
+    public List<Author> findAllAuthorsPageable(Pageable pageable) {
+        return null;
     }
 
-    public List<Author> findAuthorByNameNamedQuery(String name){
-        EntityManager entityManager = getEntityManager();
+    @Override
+    public List<Author> findAuthorByLastNamePageable(String lastName, Pageable pageable) {
+        EntityManager em = getEntityManager();
+        String hql = "SELECT a FROM Author a WHERE a.lastName = :lastName";
+        if(pageable.getSort().isSorted())
+            hql += " order by firstName " + pageable.getSort().getOrderFor("firstName")
+                    .getDirection().name();
         try{
-            TypedQuery<Author> namedQuery = entityManager.createNamedQuery("author_find_by_name", Author.class);
-            namedQuery.setParameter("first_name", name);
-            return namedQuery.getResultList();
+            Query query = em.createQuery(hql,Author.class);
+            query.setParameter("lastName", lastName);
+            query.setMaxResults(pageable.getPageSize());
+            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+            return query.getResultList();
         }
         finally {
-            entityManager.close();
+            em.close();
         }
     }
 
     private EntityManager getEntityManager(){
         return entityManagerFactory.createEntityManager();
     }
-
- */
 }
